@@ -33,7 +33,6 @@ class WriteActivity : AppCompatActivity() {
 
         db = AppDatabase.getInstance(this)
 
-
         editDate.setOnTouchListener { v, event ->
             when(event.action){
                 MotionEvent.ACTION_DOWN -> {
@@ -52,7 +51,6 @@ class WriteActivity : AppCompatActivity() {
             }
             true
         }
-
 
         btnSave.setOnClickListener {
             /*val db = Room.databaseBuilder(
