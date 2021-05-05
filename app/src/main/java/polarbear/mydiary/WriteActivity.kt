@@ -13,6 +13,8 @@ import androidx.room.Room
 import java.util.*
 
 class WriteActivity : AppCompatActivity() {
+    var db : AppDatabase? = null
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +22,9 @@ class WriteActivity : AppCompatActivity() {
 
         val editDate : EditText = findViewById(R.id.editDate)
         val btnSave : Button = findViewById(R.id.btnSave)
+
+        db = AppDatabase.getInstance(this)
+
 
         editDate.setOnTouchListener { v, event ->
             when(event.action){
@@ -41,10 +46,14 @@ class WriteActivity : AppCompatActivity() {
         }
 
         btnSave.setOnClickListener {
-            val db = Room.databaseBuilder(
+            /*val db = Room.databaseBuilder(
                 applicationContext,
                 AppDatabase::class.java, "WriteDiary"
-            ).build()
+            ).build()*/
+            val content = WriteEntity("2020-05-04", "오늘하루는?", "어땠나요?", "할일", "202005041526")
+            db?.diaryDao()?.insertAll(content)
+
+            finish()
         }
     }
 }

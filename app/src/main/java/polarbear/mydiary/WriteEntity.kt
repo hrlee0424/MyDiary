@@ -5,7 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "WriteDiary")
-data class WriteEntity(@PrimaryKey(autoGenerate = true) val id: Long, var date: String, var title: String, var contents: String,
-                       var todo: String, var regDate: String)
-
+data class WriteEntity( var date: String, var title: String, var contents: String,
+                       var todo: String, var regDate: String){
+    @PrimaryKey(autoGenerate = true) var id: Long = 0
+}
+// val id: Long,
 

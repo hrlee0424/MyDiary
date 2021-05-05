@@ -22,8 +22,9 @@ interface DiaryDAO : BaseDao<WriteEntity>{
     fun selectAll(): Single<List<WriteEntity>>
     @Query("SELECT * FROM WriteDiary")
     fun getAll() : List<WriteEntity>
-    @Query("DELETE FROM WriteDiary WHERE id = :id")
-    fun delete(id : String)
+    @Query("DELETE FROM WriteDiary") //// WHERE id = :id"
+//    fun delete(id : Long)
+    fun delete()
     @Insert()
     fun insertAll(vararg WriteDiary : WriteEntity)
 }
