@@ -15,9 +15,12 @@ import androidx.core.view.get
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    val TAG = "MainActivity"
+    private val TAG = "MainActivity"
     var db : AppDatabase? = null
     var readList = mutableListOf<WriteEntity>()
     var adapter: MainListAdapter?=null
@@ -28,30 +31,36 @@ class MainActivity : AppCompatActivity() {
 
         val toolBar : Toolbar = findViewById(R.id.toolBar)
         setSupportActionBar(toolBar)
+        val ab : androidx.appcompat.app.ActionBar = supportActionBar!!
+        ab.setDisplayShowTitleEnabled(false)
+        toolBar.title = "하루일기"
 
         //db 초기화
         db = AppDatabase.getInstance(this)
 //        val btnInsert : Button = findViewById(R.id.btnInsert)
         val listView : RecyclerView = findViewById(R.id.listView)
         val emptyText : TextView = findViewById(R.id.emptyText)
-
-
+        
         listView.layoutManager = LinearLayoutManager(this)
         listView.setHasFixedSize(true)
         adapter = MainListAdapter(readList,this)
         listView.adapter = adapter
 
 //        이전에 저장한 내용 불러와 추가
-        val savedContents = db!!.diaryDao().getAll()
-        if (savedContents.isNotEmpty()){
-            readList.addAll(savedContents)
-            Log.i(TAG, "onCreate: 1111111 " + listView.size)
-            emptyText.visibility = View.GONE
-            listView.visibility = View.VISIBLE
-        }else{
-            emptyText.visibility = View.VISIBLE
-            listView.visibility = View.GONE
+        CoroutineScope(Dispatchers.IO).launch { // 코루틴
+            val savedContents = db!!.diaryDao().getAll()
+            if (savedContents.isNotEmpty()){
+                readList.addAll(savedContents)
+                Log.i(TAG, "onCreate: 1111111 $listView.size")
+                emptyText.visibility = View.GONE
+                listView.visibility = View.VISIBLE
+            }else{
+                emptyText.visibility = View.VISIBLE
+                listView.visibility = View.GONE
+            }
         }
+//        val savedContents = db!!.diaryDao().getAll()
+
 
         //insert
 //        btnInsert.setOnClickListener {

@@ -16,8 +16,10 @@ interface BaseDao<T> {
 
 @Dao
 interface DiaryDAO : BaseDao<WriteEntity>{
+    /*@Query("SELECT * FROM WriteDiary WHERE id = :id")
+    fun selectById(id: Long): Single<WriteEntity>*/
     @Query("SELECT * FROM WriteDiary WHERE id = :id")
-    fun selectById(id: Long): Single<WriteEntity>
+    fun selectById(id: Long): WriteEntity
     @Query("SELECT * FROM WriteDiary")
     fun selectAll(): Single<List<WriteEntity>>
     @Query("SELECT * FROM WriteDiary")

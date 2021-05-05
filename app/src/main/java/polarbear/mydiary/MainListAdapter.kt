@@ -1,13 +1,14 @@
 package polarbear.mydiary
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MainListAdapter(val list: List<WriteEntity>, val context: Context) :
+class MainListAdapter(private val list: List<WriteEntity>, val context: Context) :
     RecyclerView.Adapter<MainListAdapter.ViewHolder>() {
 
 
@@ -17,11 +18,7 @@ class MainListAdapter(val list: List<WriteEntity>, val context: Context) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (!list.isEmpty()){
-            holder.title.setText(list[position].title)
-            holder.contents.setText(list[position].contents)
-            holder.date.setText(list[position].date)
-        }
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int {
@@ -33,6 +30,18 @@ class MainListAdapter(val list: List<WriteEntity>, val context: Context) :
         var contents : TextView = itemView.findViewById(R.id.contents)
         var date : TextView = itemView.findViewById(R.id.date)
 
+        fun bind(item: WriteEntity){
+            title.text = item.title
+            contents.text = item.contents
+            date.text = item.date
+
+            itemView.setOnClickListener {
+                Intent(context, DetailActivity::class.java).apply {
+                    putExtra("id", item.id)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }.run{context.startActivity(this)}
+            }
+        }
     }
 
 }

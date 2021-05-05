@@ -1,23 +1,29 @@
 package polarbear.mydiary
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.room.Room
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 
 class WriteActivity : AppCompatActivity() {
-    val TAG = "WriteActivity"
+    private val TAG = "WriteActivity"
     var db : AppDatabase? = null
 
     @SuppressLint("ClickableViewAccessibility")
@@ -25,11 +31,18 @@ class WriteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write)
 
+        val toolBar : Toolbar = findViewById(R.id.toolBar)
         val editDate : EditText = findViewById(R.id.editDate)
         val btnSave : Button = findViewById(R.id.btnSave)
         val editTitle : EditText = findViewById(R.id.editTitle)
         val editContents : EditText = findViewById(R.id.editContents)
         val editTodo : EditText = findViewById(R.id.editTodo)
+
+        setSupportActionBar(toolBar)
+        val ab : androidx.appcompat.app.ActionBar = supportActionBar!!
+        ab.setDisplayHomeAsUpEnabled(true)
+        ab.setDisplayShowTitleEnabled(false)
+        toolBar.title = "작성하기"
 
         db = AppDatabase.getInstance(this)
 
@@ -75,9 +88,21 @@ class WriteActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "양식에 맞게 내용을 입력해주세요.", Toast.LENGTH_SHORT).show()
             }else{
                 val content = WriteEntity(mDate, mTitle, mContents, mTodo, stringTime)
-                db?.diaryDao()?.insertAll(content)
+                CoroutineScope(Dispatchers.IO).launch {
+                    db?.diaryDao()?.insertAll(content)
+                }
                 finish()
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
