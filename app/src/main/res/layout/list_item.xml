@@ -17,20 +17,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:text="@{model.title}"/>
 
     <TextView
         android:id="@+id/contents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="3"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:text="@{model.contents}"/>
 
     <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end"/>
+        android:gravity="end"
+        android:text="@{model.date}"/>
 
 </LinearLayout>
 </layout>
